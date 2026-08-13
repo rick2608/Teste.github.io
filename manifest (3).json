@@ -1,0 +1,13 @@
+{
+  "background_color": "#000000",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Zero Test",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Zero",
+  "start_url": "/rick2608.github.io/Teste.github.io/",
+  "theme_color": "#00fc24",
+  "lang": "pt",
+  "description": "Um app para gravar, salvar e ouvir mensagens de voz de forma rápida e simples."
+}
