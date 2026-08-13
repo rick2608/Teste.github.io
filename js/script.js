@@ -48,50 +48,49 @@ btn.addEventListener('mouseup', () => {
 
 // // Seleção dos elementos HTML
 
-// const btn = document.getElementById('btn-gravador');
+ const btn = document.getElementById('btn-gravador');
 
-// const status = document.getElementById('status-gravacao');
-
-
-
-// // Evento: Quando o usuário coloca o dedo no botão
-
-// btn.addEventListener('touchstart', (evento) => {
-
-//     // Impede zooms e seleções de texto indesejadas no celular
-
-//     evento.preventDefault();
+ const status = document.getElementById('status-gravacao');
 
 
 
-//     // Altera a cor e os textos para o modo de gravação
+ // Evento: Quando o usuário coloca o dedo no botão
 
-//     btn.style.backgroundColor = '#e74c3c';
+ btn.addEventListener('touchstart', (evento) => {
 
+    // Impede zooms e seleções de texto indesejadas no celular
+
+     evento.preventDefault();
+
+
+     // Altera a cor e os textos para o modo de gravação
+
+     btn.style.backgroundColor = '#e74c3c';
 
 
 
 
 
 
-//     btn.innerText = '🔴 Gravando... Não solte!';
 
-//     status.innerText = 'Status: Capturando áudio...';
+    btn.innerText = '🔴 Gravando... Não solte!';
 
-// });
+     status.innerText = 'Status: Capturando áudio...';
+
+ });
 
 
 
 // // Evento: Quando o usuário remove o dedo do botão
 
-// btn.addEventListener('touchend', () => {
+ btn.addEventListener('touchend', () => {
 
-//     // Restaura o botão e atualiza o status de envio
+   // Restaura o botão e atualiza o status de envio
 
-//     btn.style.backgroundColor = '#3498db';
+    btn.style.backgroundColor = '#3498db';
 
-//     btn.innerText = '🎤 Clique e Segure para Gravar';
+     btn.innerText = '🎤 Clique e Segure para Gravar';
 
-//     status.innerText = 'Status: Gravação concluída e enviada!';
+     status.innerText = 'Status: Gravação concluída e enviada!';
 
-// });
+ });
