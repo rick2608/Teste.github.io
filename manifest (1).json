@@ -1,0 +1,12 @@
+{
+  "background_color": "#000000",
+  "dir": "ltr",
+  "display": "browser",
+  "name": "Zero Test",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Zero",
+  "start_url": "/",
+  "theme_color": "#45e753",
+  "lang": "pt"
+}
