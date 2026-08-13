@@ -1,0 +1,34 @@
+/* Container centralizado para a atividade */
+.container-gravador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilos do botão fornecidos por você */
+#btn-gravador {
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    user-select: none; /* Evita seleção de texto ao segurar */
+    transition: background-color 0.2s;
+}
+
+/* Efeito visual quando o botão for clicado/segurado */
+#btn-gravador:active {
+    background-color: #2980b9;
+}
+
+/* Estilos do status fornecidos por você */
+#status-gravacao {
+    font-weight: bold;
+    margin-top: 15px;
+    color: #555;
+}
