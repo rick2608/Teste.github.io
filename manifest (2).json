@@ -1,0 +1,21 @@
+{
+  "background_color": "#000000",
+  "dir": "ltr",
+  "display": "browser",
+  "name": "Zero Test",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Zero",
+  "start_url": "/",
+  "theme_color": "#00ff0d",
+  "display_override": [
+    "browser",
+    "fullscreen",
+    "window-controls-overlay",
+    "minimal-ui",
+    "standalone"
+  ],
+  "lang": "pt",
+  "id": "Zero Test",
+  "description": "Um app para gravar, salvar e ouvir mensagens de voz de forma rápida e simples."
+}
