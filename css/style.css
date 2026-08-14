@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at center, #2a0808 0%, #120303 35%, #000000 75%);
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: white;
+}
+
+
+/* CONTAINER PRINCIPAL */
+
+.container-gravador {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 25px;
+}
+
+
+/* PAINEL */
+
+.painel-gravador {
+    position: relative;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(145deg, #160505, #080808);
+
+    border: 1px solid #5e1717;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 0 30px rgba(180, 20, 20, 0.18),
+        inset 0 0 25px rgba(120, 0, 0, 0.08);
+}
+
+
+/* ÍCONE */
+
+.icone-gravador {
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+
+    background:
+        radial-gradient(circle, #5f1111, #250606);
+
+    border: 2px solid #8f2020;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 25px rgba(220, 30, 30, 0.3);
+}
+
+
+/* TÍTULO */
+
+h1 {
+    margin-bottom: 12px;
+
+    font-size: 28px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 10px rgba(255, 40, 40, 0.35);
+}
+
+
+/* DESCRIÇÃO */
+
+.descricao {
+    margin-bottom: 35px;
+
+    color: #aaa;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+
+/* ÁREA DO BOTÃO */
+
+.area-gravacao {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* BOTÃO */
+
+#btn-gravador {
+    width: 100%;
+
+    padding: 18px 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    border: 2px solid #a51f1f;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(135deg, #b52323, #6e1010);
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 20px rgba(180, 20, 20, 0.25);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+
+/* HOVER */
+
+#btn-gravador:hover {
+    background:
+        linear-gradient(135deg, #d12b2b, #851313);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(220, 30, 30, 0.4);
+}
+
+
+/* CLIQUE */
+
+#btn-gravador:active {
+    transform: scale(0.97);
+}
+
+
+/* ÍCONE DO BOTÃO */
+
+.icone-botao {
+    font-size: 20px;
+}
+
+
+/* STATUS */
+
+.status-container {
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 12px;
+
+    background: rgba(255, 255, 255, 0.03);
+
+    border: 1px solid #292929;
+
+    border-radius: 10px;
+}
+
+
+/* BOLINHA DO STATUS */
+
+.indicador-status {
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #555;
+
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+
+/* TEXTO DO STATUS */
+
+#status-gravacao {
+    color: #aaa;
+
+    font-size: 14px;
+}
+
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 500px) {
+
+    .container-gravador {
+        padding: 15px;
+    }
+
+    .painel-gravador {
+        padding: 35px 22px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .descricao {
+        font-size: 14px;
+    }
+
+}
