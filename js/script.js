@@ -90,7 +90,7 @@ if ('serviceWorker' in navigator) {
 
        window.addEventListener('load', () => {
 
-             navigator.serviceWorker.register('Teste.github.io/pwabuilder-sw.js');
+             navigator.serviceWorker.register('/Teste.github.io/pwabuilder-sw.js');
 
        });
 
