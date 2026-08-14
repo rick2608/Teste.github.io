@@ -90,7 +90,7 @@ if ('serviceWorker' in navigator) {
 
        window.addEventListener('load', () => {
 
-             navigator.serviceWorker.register('/pwabuilder-sw.js');
+             navigator.serviceWorker.register('pwabuilder-sw.js');
 
        });
 
