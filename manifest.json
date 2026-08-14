@@ -27,14 +27,14 @@
 
   "screenshots": [
       {
-           "src": "missao_111/screenshots/inicio.png",
+           "src": "screenshots/inicio.png",
            "sizes": "1080x1920",
            "type": "image/png",
            "form_factor": "narrow"
       },
 
      {
-           "src": "missao_111/screenshots/detalhes.png",
+           "src": "screenshots/detalhes.png",
            "sizes": "1080x1920",
            "type": "image/png",
            "form_factor": "narrow"
