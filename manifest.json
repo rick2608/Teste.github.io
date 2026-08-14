@@ -6,7 +6,7 @@
   "orientation": "portrait",
   "scope": "/",
   "short_name": "Zero",
-  "start_url": "/Teste.github.io/",
+  "start_url": "/Teste.github.io",
   "theme_color": "#00ff24",
   "description": "Um app para gravar, salvar e ouvir mensagens de voz de forma rápida e simples.",
   "lang": "pt",
