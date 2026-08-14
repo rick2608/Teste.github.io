@@ -27,14 +27,14 @@
 
   "screenshots": [
       {
-           "src": "/filme-api-web/screenshots/inicio.png",
+           "src": "missao_111/screenshots/inicio.png",
            "sizes": "1080x1920",
            "type": "image/png",
            "form_factor": "narrow"
       },
 
      {
-           "src": "/filme-api-web/screenshots/detalhes.png",
+           "src": "missao_111/screenshots/detalhes.png",
            "sizes": "1080x1920",
            "type": "image/png",
            "form_factor": "narrow"
