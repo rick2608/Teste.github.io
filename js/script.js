@@ -95,3 +95,9 @@ btn.addEventListener('touchend', () => {
     status.innerText = 'Status: Gravação concluída e enviada!';
 
 });
+
+if ('serviceWorker' in navigator) {
+       window.addEventListener('load', () => {
+             navigator.serviceWorker.register('/pwabuilder-sw.js');
+       });
+}
