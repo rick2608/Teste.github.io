@@ -20,28 +20,41 @@
 
         <section class="painel-gravador">
 
+            <!-- ÍCONE -->
             <div class="icone-gravador">
                 🎙️
             </div>
 
+
+            <!-- TÍTULO -->
             <h1>Gravador de Áudio</h1>
 
+
+            <!-- DESCRIÇÃO -->
             <p class="descricao">
                 Pressione e segure o botão para começar a gravar.
             </p>
 
+
+            <!-- BOTÃO -->
             <div class="area-gravacao">
 
                 <button id="btn-gravador" type="button">
 
-                    <span class="icone-botao">🎤</span>
+                    <span class="icone-botao">
+                        🎤
+                    </span>
 
-                    <span>Segure para Gravar</span>
+                    <span id="texto-botao">
+                        Segure para Gravar
+                    </span>
 
                 </button>
 
             </div>
 
+
+            <!-- STATUS -->
             <div class="status-container">
 
                 <span class="indicador-status"></span>
@@ -53,18 +66,20 @@
             </div>
 
 
-            <!-- ÁREA DO ÁUDIO -->
-
+            <!-- ÁREA DA GRAVAÇÃO -->
             <div class="area-audio">
 
                 <div class="titulo-audio">
                     🎵 Sua Gravação
                 </div>
 
+
+                <!-- PLAYER -->
                 <audio id="player-audio" controls></audio>
 
+
                 <p class="info-audio">
-                    Após gravar, sua mensagem aparecerá aqui para ser reproduzida.
+                    Sua gravação está pronta para ser reproduzida.
                 </p>
 
             </div>
@@ -72,6 +87,7 @@
         </section>
 
     </main>
+
 
     <script src="js/script.js"></script>
 
