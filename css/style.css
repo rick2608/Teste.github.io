@@ -20,7 +20,9 @@ body {
 }
 
 
-/* CONTAINER PRINCIPAL */
+/* ========================================
+   CONTAINER PRINCIPAL
+======================================== */
 
 .container-gravador {
     width: 100%;
@@ -30,7 +32,9 @@ body {
 }
 
 
-/* PAINEL */
+/* ========================================
+   PAINEL
+======================================== */
 
 .painel-gravador {
     position: relative;
@@ -42,17 +46,20 @@ body {
     background:
         linear-gradient(145deg, #160505, #080808);
 
-    border: 1px solid #5e1717;
+    border: 1px solid #7a1b1b;
 
     border-radius: 25px;
 
     box-shadow:
         0 0 30px rgba(180, 20, 20, 0.18),
+        0 0 70px rgba(120, 0, 0, 0.08),
         inset 0 0 25px rgba(120, 0, 0, 0.08);
 }
 
 
-/* ÍCONE */
+/* ========================================
+   ÍCONE DO GRAVADOR
+======================================== */
 
 .icone-gravador {
     width: 90px;
@@ -69,16 +76,34 @@ body {
     background:
         radial-gradient(circle, #5f1111, #250606);
 
-    border: 2px solid #8f2020;
+    border: 2px solid #a51f1f;
 
     border-radius: 50%;
 
     box-shadow:
-        0 0 25px rgba(220, 30, 30, 0.3);
+        0 0 20px rgba(220, 30, 30, 0.35),
+        0 0 45px rgba(180, 20, 20, 0.12);
+
+    transition: 0.3s ease;
 }
 
 
-/* TÍTULO */
+/* Efeito ao passar o mouse */
+
+.icone-gravador:hover {
+    transform: scale(1.05);
+
+    border-color: #d12b2b;
+
+    box-shadow:
+        0 0 30px rgba(220, 30, 30, 0.55),
+        0 0 60px rgba(180, 20, 20, 0.2);
+}
+
+
+/* ========================================
+   TÍTULO
+======================================== */
 
 h1 {
     margin-bottom: 12px;
@@ -92,7 +117,9 @@ h1 {
 }
 
 
-/* DESCRIÇÃO */
+/* ========================================
+   DESCRIÇÃO
+======================================== */
 
 .descricao {
     margin-bottom: 35px;
@@ -105,7 +132,9 @@ h1 {
 }
 
 
-/* ÁREA DO BOTÃO */
+/* ========================================
+   ÁREA DO BOTÃO
+======================================== */
 
 .area-gravacao {
     display: flex;
@@ -113,7 +142,9 @@ h1 {
 }
 
 
-/* BOTÃO */
+/* ========================================
+   BOTÃO
+======================================== */
 
 #btn-gravador {
     width: 100%;
@@ -123,9 +154,11 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 12px;
 
     border: 2px solid #a51f1f;
+
     border-radius: 14px;
 
     background:
@@ -148,7 +181,9 @@ h1 {
 }
 
 
-/* HOVER */
+/* ========================================
+   HOVER DO BOTÃO
+======================================== */
 
 #btn-gravador:hover {
     background:
@@ -161,21 +196,65 @@ h1 {
 }
 
 
-/* CLIQUE */
+/* ========================================
+   CLIQUE
+======================================== */
 
 #btn-gravador:active {
     transform: scale(0.97);
 }
 
 
-/* ÍCONE DO BOTÃO */
+/* ========================================
+   BOTÃO ENQUANTO ESTÁ GRAVANDO
+======================================== */
+
+#btn-gravador.gravando {
+    background:
+        linear-gradient(135deg, #8d1010, #4d0505);
+
+    border-color: #d12b2b;
+
+    animation: pulsarBotao 1.2s infinite;
+
+    box-shadow:
+        0 0 25px rgba(220, 30, 30, 0.55);
+}
+
+
+/* Animação do botão */
+
+@keyframes pulsarBotao {
+
+    0% {
+        box-shadow:
+            0 0 10px rgba(220, 30, 30, 0.3);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(220, 30, 30, 0.7);
+    }
+
+    100% {
+        box-shadow:
+            0 0 10px rgba(220, 30, 30, 0.3);
+    }
+}
+
+
+/* ========================================
+   ÍCONE DO BOTÃO
+======================================== */
 
 .icone-botao {
     font-size: 20px;
 }
 
 
-/* STATUS */
+/* ========================================
+   STATUS
+======================================== */
 
 .status-container {
     margin-top: 30px;
@@ -183,6 +262,7 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 10px;
 
     padding: 12px;
@@ -192,10 +272,14 @@ h1 {
     border: 1px solid #292929;
 
     border-radius: 10px;
+
+    transition: 0.3s ease;
 }
 
 
-/* BOLINHA DO STATUS */
+/* ========================================
+   BOLINHA DO STATUS
+======================================== */
 
 .indicador-status {
     width: 9px;
@@ -205,11 +289,59 @@ h1 {
 
     background: #555;
 
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+    box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.15);
+
+    transition: 0.3s ease;
 }
 
 
-/* TEXTO DO STATUS */
+/* ========================================
+   STATUS DURANTE A GRAVAÇÃO
+======================================== */
+
+.status-container.gravando {
+    border-color: #5e1717;
+
+    background: rgba(120, 0, 0, 0.08);
+}
+
+
+/* Bolinha vermelha */
+
+.status-container.gravando .indicador-status {
+    background: #e32626;
+
+    box-shadow:
+        0 0 8px #e32626,
+        0 0 18px rgba(227, 38, 38, 0.7);
+
+    animation: pulsarStatus 1s infinite;
+}
+
+
+@keyframes pulsarStatus {
+
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.75);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* ========================================
+   TEXTO DO STATUS
+======================================== */
 
 #status-gravacao {
     color: #aaa;
@@ -218,7 +350,90 @@ h1 {
 }
 
 
-/* RESPONSIVIDADE */
+/* ========================================
+   ÁREA DA GRAVAÇÃO
+======================================== */
+
+.area-audio {
+    width: 100%;
+
+    margin-top: 35px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #292929;
+}
+
+
+/* ========================================
+   TÍTULO "SUA GRAVAÇÃO"
+======================================== */
+
+.titulo-audio {
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    text-shadow:
+        0 0 8px rgba(220, 30, 30, 0.25);
+}
+
+
+/* ========================================
+   PLAYER DE ÁUDIO
+======================================== */
+
+#audioPlayer {
+    width: 100%;
+
+    height: 48px;
+
+    border-radius: 10px;
+
+    background: #111;
+
+    accent-color: #c52222;
+
+    outline: none;
+}
+
+
+/* ========================================
+   TEXTO ABAIXO DO PLAYER
+======================================== */
+
+.info-audio {
+    margin-top: 10px;
+
+    color: #666;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+
+/* ========================================
+   ÁUDIO ESCONDIDO ANTES DA GRAVAÇÃO
+======================================== */
+
+.area-audio.escondido {
+    display: none;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
 
 @media (max-width: 500px) {
 
@@ -236,6 +451,17 @@ h1 {
 
     .descricao {
         font-size: 14px;
+    }
+
+    #btn-gravador {
+        padding: 16px 20px;
+    }
+
+    .icone-gravador {
+        width: 80px;
+        height: 80px;
+
+        font-size: 36px;
     }
 
 }
