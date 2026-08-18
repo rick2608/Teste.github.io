@@ -98,7 +98,7 @@ if ('serviceWorker' in navigator) {
 
 // Pega o elemento <audio> do HTML pelo ID "audioPlayer".
 // Esse elemento será usado para reproduzir o áudio gravado.
-const audioPlayer = document.getElementById("audioPlayer");
+const audioPlayer = document.getElementById("player-audio");
 
 
 // Cria uma lista vazia para armazenar os pedaços do áudio.
