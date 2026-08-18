@@ -30,13 +30,14 @@
                 Pressione e segure o botão para começar a gravar.
             </p>
 
-            <audio id ="player-audio" controls style = "margin-top:15px; display: none;"></audio>
-
             <div class="area-gravacao">
 
                 <button id="btn-gravador" type="button">
+
                     <span class="icone-botao">🎤</span>
+
                     <span>Segure para Gravar</span>
+
                 </button>
 
             </div>
@@ -47,6 +48,23 @@
 
                 <p id="status-gravacao">
                     Status: Pronto para gravar
+                </p>
+
+            </div>
+
+
+            <!-- ÁREA DO ÁUDIO -->
+
+            <div class="area-audio">
+
+                <div class="titulo-audio">
+                    🎵 Sua Gravação
+                </div>
+
+                <audio id="player-audio" controls></audio>
+
+                <p class="info-audio">
+                    Após gravar, sua mensagem aparecerá aqui para ser reproduzida.
                 </p>
 
             </div>
