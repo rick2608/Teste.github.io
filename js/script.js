@@ -1,36 +1,27 @@
-// as const btn e status são variáveis constantes
+// ==========================================
+// ELEMENTOS DO HTML
+// ==========================================
 
 const btn = document.getElementById('btn-gravador');
 
 const status = document.getElementById('status-gravacao');
 
-
-// Pega o elemento <audio> do HTML pelo ID "player-audio"
-// Esse elemento será usado para reproduzir o áudio gravado.
-
 const audioPlayer = document.getElementById('player-audio');
-
-
-// Pega a área onde o player de áudio está
 
 const areaAudio = document.querySelector('.area-audio');
 
 
-// Cria uma lista vazia para armazenar os pedaços do áudio.
-// Durante a gravação, o navegador vai entregar o áudio em pequenos pedaços.
+// ==========================================
+// VARIÁVEIS
+// ==========================================
+
+let mediaRecorder = null;
 
 let audioChunks = [];
 
-
-// Variável que vai guardar o MediaRecorder
-
-let mediaRecorder;
-
-
-// Variável para saber se estamos gravando
-
 let gravando = false;
 
+let stream = null;
 
 
 // ==========================================
@@ -39,7 +30,7 @@ let gravando = false;
 
 async function iniciarGravacao() {
 
-    // Verifica se já está gravando
+    // Evita iniciar duas gravações ao mesmo tempo
 
     if (gravando) {
         return;
@@ -48,74 +39,135 @@ async function iniciarGravacao() {
 
     try {
 
-        // Pede permissão para usar o microfone
+        // Pede acesso ao microfone
 
-        const stream = await navigator.mediaDevices.getUserMedia({
+        stream = await navigator.mediaDevices.getUserMedia({
             audio: true
         });
 
 
-        // Cria o MediaRecorder usando o microfone
+        // Verifica qual formato o navegador suporta
 
-        mediaRecorder = new MediaRecorder(stream);
+        let tipoAudio = '';
 
 
-        // Limpa os pedaços de uma gravação anterior
+        if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+
+            tipoAudio = 'audio/webm;codecs=opus';
+
+        } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+
+            tipoAudio = 'audio/webm';
+
+        } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+
+            tipoAudio = 'audio/ogg;codecs=opus';
+
+        }
+
+
+        // Cria o MediaRecorder
+
+        if (tipoAudio) {
+
+            mediaRecorder = new MediaRecorder(stream, {
+                mimeType: tipoAudio
+            });
+
+        } else {
+
+            mediaRecorder = new MediaRecorder(stream);
+
+        }
+
+
+        console.log('Formato utilizado:', mediaRecorder.mimeType);
+
+
+        // Limpa gravação anterior
 
         audioChunks = [];
 
 
-        // Quando o MediaRecorder tiver um pedaço
-        // de áudio disponível, esse evento será executado
+        // ==========================================
+        // RECEBER PEDAÇOS DO ÁUDIO
+        // ==========================================
 
-        mediaRecorder.ondataavailable = (evento) => {
+        mediaRecorder.addEventListener('dataavailable', (evento) => {
 
-            // Verifica se realmente recebeu algum áudio
-
-            if (evento.data.size > 0) {
-
-                // Adiciona o pedaço na lista
+            if (evento.data && evento.data.size > 0) {
 
                 audioChunks.push(evento.data);
 
             }
 
-        };
+        });
 
 
-        // Quando a gravação for parada
+        // ==========================================
+        // QUANDO PARAR A GRAVAÇÃO
+        // ==========================================
 
-        mediaRecorder.onstop = () => {
+        mediaRecorder.addEventListener('stop', () => {
 
-            // Junta todos os pedaços do áudio
-            // e cria um único arquivo
+            console.log('Pedaços de áudio:', audioChunks.length);
+
+
+            // Verifica se realmente temos áudio
+
+            if (audioChunks.length === 0) {
+
+                status.innerText =
+                    'Status: Nenhum áudio foi gravado.';
+
+                return;
+
+            }
+
+
+            // Pega o formato utilizado pelo gravador
+
+            const tipoBlob = mediaRecorder.mimeType || 'audio/webm';
+
+
+            // Junta todos os pedaços
 
             const audioBlob = new Blob(audioChunks, {
-
-                // Define o tipo do arquivo
-
-                type: 'audio/webm'
-
+                type: tipoBlob
             });
 
 
-            // Cria uma URL temporária para o áudio
+            console.log('Tamanho do áudio:', audioBlob.size);
+
+
+            // Verifica se o arquivo não está vazio
+
+            if (audioBlob.size === 0) {
+
+                status.innerText =
+                    'Status: O áudio ficou vazio.';
+
+                return;
+
+            }
+
+
+            // Cria uma URL para o áudio
 
             const audioUrl = URL.createObjectURL(audioBlob);
 
 
-            // Coloca o áudio dentro do player
+            // Coloca o áudio no player
 
             audioPlayer.src = audioUrl;
 
+            audioPlayer.load();
 
-            // Mostra o player de áudio
+
+            // Mostra o player
 
             audioPlayer.style.display = 'block';
 
-
-            // Se você estiver usando a classe
-            // "area-audio", mostra a área também
 
             if (areaAudio) {
 
@@ -124,63 +176,71 @@ async function iniciarGravacao() {
             }
 
 
-            // Muda o status
+            // Atualiza o status
 
-            status.innerText = 'Status: Gravação concluída!';
+            status.innerText =
+                'Status: Gravação concluída!';
 
 
             // Libera o microfone
 
-            stream.getTracks().forEach((track) => {
+            if (stream) {
 
-                track.stop();
+                stream.getTracks().forEach((track) => {
 
-            });
+                    track.stop();
+
+                });
+
+            }
 
 
-            // Limpa os pedaços da gravação
+            // Limpa os pedaços
 
             audioChunks = [];
 
-        };
+        });
 
 
-        // Começa a gravação
+        // ==========================================
+        // COMEÇAR
+        // ==========================================
 
-        mediaRecorder.start();
+        mediaRecorder.start(100);
 
-
-        // Indica que estamos gravando
 
         gravando = true;
 
 
-        // Muda a cor do botão
+        // Visual do botão
+
+        btn.classList.add('gravando');
 
         btn.style.backgroundColor = '#e74c3c';
 
 
-        // Muda o texto do botão
+        btn.innerText =
+            '🔴 Gravando... Não solte!';
 
-        btn.innerText = '🔴 Gravando... Não solte!';
 
+        // Status
 
-        // Muda o texto do status
-
-        status.innerText = 'Status: Capturando áudio...';
+        status.innerText =
+            'Status: Capturando áudio...';
 
     }
 
+
     catch (erro) {
 
-        // Mostra o erro no console
-
-        console.error('Erro ao acessar o microfone:', erro);
+        console.error('Erro ao iniciar gravação:', erro);
 
 
-        // Informa o usuário
+        status.innerText =
+            'Status: Não foi possível acessar o microfone.';
 
-        status.innerText = 'Status: Não foi possível acessar o microfone.';
+
+        gravando = false;
 
     }
 
@@ -194,47 +254,39 @@ async function iniciarGravacao() {
 
 function pararGravacao() {
 
-    // Verifica se existe um MediaRecorder
-
     if (!mediaRecorder) {
         return;
     }
 
 
-    // Verifica se ele está gravando
-
     if (mediaRecorder.state === 'recording') {
-
-        // Para a gravação
 
         mediaRecorder.stop();
 
     }
 
 
-    // Informa que não estamos mais gravando
-
     gravando = false;
 
 
-    // Restaura a cor do botão
+    // Remove efeito do botão
 
-    btn.style.backgroundColor = '#3498db';
+    btn.classList.remove('gravando');
 
 
-    // Restaura o texto do botão
+    btn.style.backgroundColor = '';
 
-    btn.innerText = '🎤 Clique e Segure para Gravar';
+
+    btn.innerText =
+        '🎤 Segure para Gravar';
 
 }
 
 
 
 // ==========================================
-// MOUSE - APERTAR
+// MOUSE
 // ==========================================
-
-// Quando o botão do mouse for pressionado
 
 btn.addEventListener('mousedown', (evento) => {
 
@@ -244,13 +296,6 @@ btn.addEventListener('mousedown', (evento) => {
 
 });
 
-
-
-// ==========================================
-// MOUSE - SOLTAR
-// ==========================================
-
-// Quando o botão do mouse for solto
 
 btn.addEventListener('mouseup', () => {
 
@@ -262,10 +307,6 @@ btn.addEventListener('mouseup', () => {
 
 });
 
-
-
-// Se o mouse sair do botão enquanto estiver segurando,
-// também para a gravação
 
 btn.addEventListener('mouseleave', () => {
 
@@ -280,42 +321,27 @@ btn.addEventListener('mouseleave', () => {
 
 
 // ==========================================
-// CELULAR - TOCAR
+// CELULAR
 // ==========================================
-
-// Evento: quando o usuário coloca o dedo no botão
 
 btn.addEventListener('touchstart', (evento) => {
 
-    // Impede comportamentos indesejados do celular
-
     evento.preventDefault();
 
+    if (!gravando) {
 
-    // Começa a gravação
+        iniciarGravacao();
 
-    iniciarGravacao();
+    }
 
 }, {
     passive: false
 });
 
 
-
-// ==========================================
-// CELULAR - SOLTAR
-// ==========================================
-
-// Evento: quando o usuário remove o dedo
-
 btn.addEventListener('touchend', (evento) => {
 
-    // Impede comportamentos indesejados
-
     evento.preventDefault();
-
-
-    // Para a gravação
 
     if (gravando) {
 
@@ -327,10 +353,6 @@ btn.addEventListener('touchend', (evento) => {
     passive: false
 });
 
-
-
-// Se o toque for cancelado,
-// também para a gravação
 
 btn.addEventListener('touchcancel', () => {
 
@@ -354,7 +376,15 @@ if ('serviceWorker' in navigator) {
 
         navigator.serviceWorker.register(
             '/Teste.github.io/pwabuilder-sw.js'
-        );
+        )
+        .catch((erro) => {
+
+            console.error(
+                'Erro ao registrar Service Worker:',
+                erro
+            );
+
+        });
 
     });
 
