@@ -95,3 +95,52 @@ if ('serviceWorker' in navigator) {
        });
 
 }
+
+// Pega o elemento <audio> do HTML pelo ID "audioPlayer".
+// Esse elemento será usado para reproduzir o áudio gravado.
+const audioPlayer = document.getElementById("audioPlayer");
+
+
+// Cria uma lista vazia para armazenar os pedaços do áudio.
+// Durante a gravação, o navegador vai entregar o áudio em pequenos pedaços.
+let audioChunks = [];
+
+
+// O evento "ondataavailable" acontece sempre que o MediaRecorder
+// possui um pedaço de áudio disponível.
+mediaRecorder.ondataavailable = (evento) => {
+
+    // Adiciona o pedaço de áudio recebido dentro da lista.
+    audioChunks.push(evento.data);
+};
+
+
+// O evento "onstop" acontece quando a gravação é parada.
+mediaRecorder.onstop = () => {
+
+    // Junta todos os pedaços que estavam dentro de "audioChunks"
+    // e transforma tudo em um único arquivo de áudio.
+    const audioBlob = new Blob(audioChunks, {
+        
+        // Define o formato do áudio.
+        // "audio/webm" é um formato bastante usado pelo MediaRecorder.
+        type: "audio/webm"
+    });
+
+
+    // Cria uma URL temporária para o áudio.
+    // Essa URL permite que o elemento <audio> consiga acessar
+    // o áudio que acabamos de criar.
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+
+    // Coloca a URL do áudio dentro do player.
+    // A partir daqui, o navegador sabe qual áudio deve reproduzir.
+    audioPlayer.src = audioUrl;
+
+
+    // Limpa a lista de pedaços do áudio.
+    // Assim podemos fazer uma nova gravação sem misturar
+    // o áudio antigo com o novo.
+    audioChunks = [];
+};
