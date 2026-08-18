@@ -39,34 +39,95 @@ async function iniciarGravacao() {
 
     try {
 
-        // Pede acesso ao microfone
+        // ==========================================
+        // PEDIR ACESSO AO MICROFONE
+        // ==========================================
 
         stream = await navigator.mediaDevices.getUserMedia({
             audio: true
         });
 
 
-        // Verifica qual formato o navegador suporta
+        // ==========================================
+        // VERIFICAR FORMATO COMPATÍVEL
+        // ==========================================
 
         let tipoAudio = '';
 
 
-        if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        // Primeiro tenta MP4/AAC.
+        // É o formato preferido para Safari e iPhone.
+
+        if (
+            MediaRecorder.isTypeSupported(
+                'audio/mp4;codecs=mp4a.40.2'
+            )
+        ) {
+
+            tipoAudio = 'audio/mp4;codecs=mp4a.40.2';
+
+        }
+
+
+        // Tenta MP4 sem especificar o codec
+
+        else if (
+            MediaRecorder.isTypeSupported('audio/mp4')
+        ) {
+
+            tipoAudio = 'audio/mp4';
+
+        }
+
+
+        // Se não suportar MP4, tenta WebM com Opus
+
+        else if (
+            MediaRecorder.isTypeSupported(
+                'audio/webm;codecs=opus'
+            )
+        ) {
 
             tipoAudio = 'audio/webm;codecs=opus';
 
-        } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        }
+
+
+        // Tenta WebM simples
+
+        else if (
+            MediaRecorder.isTypeSupported('audio/webm')
+        ) {
 
             tipoAudio = 'audio/webm';
 
-        } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+        }
+
+
+        // Tenta OGG como última alternativa
+
+        else if (
+            MediaRecorder.isTypeSupported(
+                'audio/ogg;codecs=opus'
+            )
+        ) {
 
             tipoAudio = 'audio/ogg;codecs=opus';
 
         }
 
 
-        // Cria o MediaRecorder
+        // Mostra no console qual formato foi escolhido
+
+        console.log(
+            'Formato escolhido:',
+            tipoAudio || 'padrão do navegador'
+        );
+
+
+        // ==========================================
+        // CRIAR MEDIARECORDER
+        // ==========================================
 
         if (tipoAudio) {
 
@@ -76,15 +137,23 @@ async function iniciarGravacao() {
 
         } else {
 
+            // Caso o navegador não informe um formato,
+            // deixa ele escolher automaticamente.
+
             mediaRecorder = new MediaRecorder(stream);
 
         }
 
 
-        console.log('Formato utilizado:', mediaRecorder.mimeType);
+        console.log(
+            'Formato real utilizado:',
+            mediaRecorder.mimeType
+        );
 
 
-        // Limpa gravação anterior
+        // ==========================================
+        // LIMPAR GRAVAÇÃO ANTERIOR
+        // ==========================================
 
         audioChunks = [];
 
@@ -93,137 +162,206 @@ async function iniciarGravacao() {
         // RECEBER PEDAÇOS DO ÁUDIO
         // ==========================================
 
-        mediaRecorder.addEventListener('dataavailable', (evento) => {
+        mediaRecorder.addEventListener(
+            'dataavailable',
+            (evento) => {
 
-            if (evento.data && evento.data.size > 0) {
+                // Verifica se recebeu algum áudio
 
-                audioChunks.push(evento.data);
+                if (
+                    evento.data &&
+                    evento.data.size > 0
+                ) {
+
+                    // Guarda o pedaço recebido
+
+                    audioChunks.push(evento.data);
+
+                }
 
             }
-
-        });
+        );
 
 
         // ==========================================
         // QUANDO PARAR A GRAVAÇÃO
         // ==========================================
 
-        mediaRecorder.addEventListener('stop', () => {
+        mediaRecorder.addEventListener(
+            'stop',
+            () => {
 
-            console.log('Pedaços de áudio:', audioChunks.length);
+                console.log(
+                    'Pedaços de áudio:',
+                    audioChunks.length
+                );
 
 
-            // Verifica se realmente temos áudio
+                // Verifica se recebeu algum áudio
 
-            if (audioChunks.length === 0) {
+                if (audioChunks.length === 0) {
+
+                    status.innerText =
+                        'Status: Nenhum áudio foi gravado.';
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // CRIAR O ARQUIVO DE ÁUDIO
+                // ==========================================
+
+                // Usa exatamente o formato que o
+                // MediaRecorder utilizou.
+
+                const tipoBlob =
+                    mediaRecorder.mimeType;
+
+
+                console.log(
+                    'Tipo do Blob:',
+                    tipoBlob
+                );
+
+
+                // Junta todos os pedaços
+
+                const audioBlob = new Blob(
+                    audioChunks,
+                    {
+                        type: tipoBlob
+                    }
+                );
+
+
+                console.log(
+                    'Tamanho do áudio:',
+                    audioBlob.size
+                );
+
+
+                // Verifica se o arquivo não está vazio
+
+                if (audioBlob.size === 0) {
+
+                    status.innerText =
+                        'Status: O áudio ficou vazio.';
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // CRIAR URL DO ÁUDIO
+                // ==========================================
+
+                const audioUrl =
+                    URL.createObjectURL(audioBlob);
+
+
+                console.log(
+                    'URL do áudio criada:',
+                    audioUrl
+                );
+
+
+                // ==========================================
+                // COLOCAR ÁUDIO NO PLAYER
+                // ==========================================
+
+                audioPlayer.src = audioUrl;
+
+                audioPlayer.type = tipoBlob;
+
+                audioPlayer.load();
+
+
+                // ==========================================
+                // MOSTRAR PLAYER
+                // ==========================================
+
+                audioPlayer.style.display =
+                    'block';
+
+
+                if (areaAudio) {
+
+                    areaAudio.classList.add(
+                        'mostrar'
+                    );
+
+                }
+
+
+                // ==========================================
+                // ATUALIZAR STATUS
+                // ==========================================
 
                 status.innerText =
-                    'Status: Nenhum áudio foi gravado.';
-
-                return;
-
-            }
+                    'Status: Gravação concluída!';
 
 
-            // Pega o formato utilizado pelo gravador
+                // ==========================================
+                // LIBERAR MICROFONE
+                // ==========================================
 
-            const tipoBlob = mediaRecorder.mimeType || 'audio/webm';
+                if (stream) {
+
+                    stream
+                        .getTracks()
+                        .forEach((track) => {
+
+                            track.stop();
+
+                        });
+
+                }
 
 
-            // Junta todos os pedaços
+                // Limpa os pedaços
 
-            const audioBlob = new Blob(audioChunks, {
-                type: tipoBlob
-            });
-
-
-            console.log('Tamanho do áudio:', audioBlob.size);
-
-
-            // Verifica se o arquivo não está vazio
-
-            if (audioBlob.size === 0) {
-
-                status.innerText =
-                    'Status: O áudio ficou vazio.';
-
-                return;
+                audioChunks = [];
 
             }
-
-
-            // Cria uma URL para o áudio
-
-            const audioUrl = URL.createObjectURL(audioBlob);
-
-
-            // Coloca o áudio no player
-
-            audioPlayer.src = audioUrl;
-
-            audioPlayer.load();
-
-
-            // Mostra o player
-
-            audioPlayer.style.display = 'block';
-
-
-            if (areaAudio) {
-
-                areaAudio.classList.add('mostrar');
-
-            }
-
-
-            // Atualiza o status
-
-            status.innerText =
-                'Status: Gravação concluída!';
-
-
-            // Libera o microfone
-
-            if (stream) {
-
-                stream.getTracks().forEach((track) => {
-
-                    track.stop();
-
-                });
-
-            }
-
-
-            // Limpa os pedaços
-
-            audioChunks = [];
-
-        });
+        );
 
 
         // ==========================================
-        // COMEÇAR
+        // COMEÇAR GRAVAÇÃO
         // ==========================================
+
+        // O intervalo de 100ms faz o navegador
+        // entregar pequenos pedaços do áudio.
 
         mediaRecorder.start(100);
 
 
+        // Indica que está gravando
+
         gravando = true;
 
 
-        // Visual do botão
+        // ==========================================
+        // ALTERAR VISUAL DO BOTÃO
+        // ==========================================
 
         btn.classList.add('gravando');
 
-        btn.style.backgroundColor = '#e74c3c';
+
+        btn.style.backgroundColor =
+            '#e74c3c';
 
 
         btn.innerText =
             '🔴 Gravando... Não solte!';
 
 
-        // Status
+        // ==========================================
+        // ALTERAR STATUS
+        // ==========================================
 
         status.innerText =
             'Status: Capturando áudio...';
@@ -233,7 +371,10 @@ async function iniciarGravacao() {
 
     catch (erro) {
 
-        console.error('Erro ao iniciar gravação:', erro);
+        console.error(
+            'Erro ao iniciar gravação:',
+            erro
+        );
 
 
         status.innerText =
@@ -249,27 +390,61 @@ async function iniciarGravacao() {
 
 
 // ==========================================
+// ERRO DO PLAYER
+// ==========================================
+
+audioPlayer.addEventListener(
+    'error',
+    () => {
+
+        console.error(
+            'Erro ao reproduzir o áudio:',
+            audioPlayer.error
+        );
+
+
+        status.innerText =
+            'Status: Erro ao reproduzir o áudio.';
+
+    }
+);
+
+
+
+// ==========================================
 // PARAR GRAVAÇÃO
 // ==========================================
 
 function pararGravacao() {
+
+    // Verifica se existe um MediaRecorder
 
     if (!mediaRecorder) {
         return;
     }
 
 
-    if (mediaRecorder.state === 'recording') {
+    // Verifica se está gravando
+
+    if (
+        mediaRecorder.state === 'recording'
+    ) {
+
+        // Para a gravação
 
         mediaRecorder.stop();
 
     }
 
 
+    // Atualiza variável
+
     gravando = false;
 
 
-    // Remove efeito do botão
+    // ==========================================
+    // RESTAURAR BOTÃO
+    // ==========================================
 
     btn.classList.remove('gravando');
 
@@ -288,81 +463,127 @@ function pararGravacao() {
 // MOUSE
 // ==========================================
 
-btn.addEventListener('mousedown', (evento) => {
 
-    evento.preventDefault();
+// Quando o mouse pressionar o botão
 
-    iniciarGravacao();
+btn.addEventListener(
+    'mousedown',
+    (evento) => {
 
-});
+        evento.preventDefault();
 
-
-btn.addEventListener('mouseup', () => {
-
-    if (gravando) {
-
-        pararGravacao();
-
-    }
-
-});
-
-
-btn.addEventListener('mouseleave', () => {
-
-    if (gravando) {
-
-        pararGravacao();
-
-    }
-
-});
-
-
-
-// ==========================================
-// CELULAR
-// ==========================================
-
-btn.addEventListener('touchstart', (evento) => {
-
-    evento.preventDefault();
-
-    if (!gravando) {
 
         iniciarGravacao();
 
     }
-
-}, {
-    passive: false
-});
+);
 
 
-btn.addEventListener('touchend', (evento) => {
 
-    evento.preventDefault();
+// Quando o mouse soltar o botão
 
-    if (gravando) {
+btn.addEventListener(
+    'mouseup',
+    () => {
 
-        pararGravacao();
+        if (gravando) {
 
-    }
+            pararGravacao();
 
-}, {
-    passive: false
-});
-
-
-btn.addEventListener('touchcancel', () => {
-
-    if (gravando) {
-
-        pararGravacao();
+        }
 
     }
+);
 
-});
+
+
+// Se o mouse sair do botão enquanto
+// estiver pressionado
+
+btn.addEventListener(
+    'mouseleave',
+    () => {
+
+        if (gravando) {
+
+            pararGravacao();
+
+        }
+
+    }
+);
+
+
+
+// ==========================================
+// CELULAR / TOUCH
+// ==========================================
+
+
+// Quando o usuário coloca o dedo no botão
+
+btn.addEventListener(
+    'touchstart',
+    (evento) => {
+
+        // Impede comportamento padrão
+
+        evento.preventDefault();
+
+
+        // Evita iniciar duas vezes
+
+        if (!gravando) {
+
+            iniciarGravacao();
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+// Quando o usuário tira o dedo
+
+btn.addEventListener(
+    'touchend',
+    (evento) => {
+
+        evento.preventDefault();
+
+
+        if (gravando) {
+
+            pararGravacao();
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+// Se o toque for cancelado
+
+btn.addEventListener(
+    'touchcancel',
+    () => {
+
+        if (gravando) {
+
+            pararGravacao();
+
+        }
+
+    }
+);
 
 
 
@@ -372,20 +593,26 @@ btn.addEventListener('touchcancel', () => {
 
 if ('serviceWorker' in navigator) {
 
-    window.addEventListener('load', () => {
+    window.addEventListener(
+        'load',
+        () => {
 
-        navigator.serviceWorker.register(
-            '/Teste.github.io/pwabuilder-sw.js'
-        )
-        .catch((erro) => {
+            navigator.serviceWorker
+                .register(
+                    '/Teste.github.io/pwabuilder-sw.js'
+                )
+                .catch(
+                    (erro) => {
 
-            console.error(
-                'Erro ao registrar Service Worker:',
-                erro
-            );
+                        console.error(
+                            'Erro ao registrar Service Worker:',
+                            erro
+                        );
 
-        });
+                    }
+                );
 
-    });
+        }
+    );
 
 }
