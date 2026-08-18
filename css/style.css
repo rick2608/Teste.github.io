@@ -1,8 +1,13 @@
+/* ========================================
+   CONFIGURAÇÕES GERAIS
+======================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 
 body {
     min-height: 100vh;
@@ -12,7 +17,12 @@ body {
     align-items: center;
 
     background:
-        radial-gradient(circle at center, #2a0808 0%, #120303 35%, #000000 75%);
+        radial-gradient(
+            circle at center,
+            #2a0808 0%,
+            #120303 35%,
+            #000000 75%
+        );
 
     font-family: Arial, Helvetica, sans-serif;
 
@@ -44,7 +54,11 @@ body {
     text-align: center;
 
     background:
-        linear-gradient(145deg, #160505, #080808);
+        linear-gradient(
+            145deg,
+            #160505,
+            #080808
+        );
 
     border: 1px solid #7a1b1b;
 
@@ -74,7 +88,11 @@ body {
     font-size: 42px;
 
     background:
-        radial-gradient(circle, #5f1111, #250606);
+        radial-gradient(
+            circle,
+            #5f1111,
+            #250606
+        );
 
     border: 2px solid #a51f1f;
 
@@ -87,8 +105,6 @@ body {
     transition: 0.3s ease;
 }
 
-
-/* Efeito ao passar o mouse */
 
 .icone-gravador:hover {
     transform: scale(1.05);
@@ -162,7 +178,11 @@ h1 {
     border-radius: 14px;
 
     background:
-        linear-gradient(135deg, #b52323, #6e1010);
+        linear-gradient(
+            135deg,
+            #b52323,
+            #6e1010
+        );
 
     color: white;
 
@@ -178,16 +198,26 @@ h1 {
         transform 0.2s,
         box-shadow 0.2s,
         background 0.2s;
+
+    user-select: none;
+
+    -webkit-user-select: none;
+
+    touch-action: none;
 }
 
 
 /* ========================================
-   HOVER DO BOTÃO
+   HOVER
 ======================================== */
 
 #btn-gravador:hover {
     background:
-        linear-gradient(135deg, #d12b2b, #851313);
+        linear-gradient(
+            135deg,
+            #d12b2b,
+            #851313
+        );
 
     transform: translateY(-2px);
 
@@ -206,23 +236,26 @@ h1 {
 
 
 /* ========================================
-   BOTÃO ENQUANTO ESTÁ GRAVANDO
+   BOTÃO DURANTE A GRAVAÇÃO
 ======================================== */
 
 #btn-gravador.gravando {
+
     background:
-        linear-gradient(135deg, #8d1010, #4d0505);
+        linear-gradient(
+            135deg,
+            #8d1010,
+            #4d0505
+        );
 
-    border-color: #d12b2b;
-
-    animation: pulsarBotao 1.2s infinite;
+    border-color: #e32626;
 
     box-shadow:
-        0 0 25px rgba(220, 30, 30, 0.55);
+        0 0 25px rgba(220, 30, 30, 0.65);
+
+    animation: pulsarBotao 1.2s infinite;
 }
 
-
-/* Animação do botão */
 
 @keyframes pulsarBotao {
 
@@ -233,7 +266,7 @@ h1 {
 
     50% {
         box-shadow:
-            0 0 30px rgba(220, 30, 30, 0.7);
+            0 0 30px rgba(220, 30, 30, 0.75);
     }
 
     100% {
@@ -267,7 +300,8 @@ h1 {
 
     padding: 12px;
 
-    background: rgba(255, 255, 255, 0.03);
+    background:
+        rgba(255, 255, 255, 0.03);
 
     border: 1px solid #292929;
 
@@ -278,12 +312,26 @@ h1 {
 
 
 /* ========================================
+   STATUS DURANTE GRAVAÇÃO
+======================================== */
+
+.status-container.gravando {
+    background:
+        rgba(120, 0, 0, 0.08);
+
+    border-color: #5e1717;
+}
+
+
+/* ========================================
    BOLINHA DO STATUS
 ======================================== */
 
 .indicador-status {
     width: 9px;
     height: 9px;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 
@@ -297,19 +345,11 @@ h1 {
 
 
 /* ========================================
-   STATUS DURANTE A GRAVAÇÃO
+   BOLINHA VERMELHA DURANTE GRAVAÇÃO
 ======================================== */
 
-.status-container.gravando {
-    border-color: #5e1717;
-
-    background: rgba(120, 0, 0, 0.08);
-}
-
-
-/* Bolinha vermelha */
-
 .status-container.gravando .indicador-status {
+
     background: #e32626;
 
     box-shadow:
@@ -351,25 +391,53 @@ h1 {
 
 
 /* ========================================
-   ÁREA DA GRAVAÇÃO
+   ÁREA DO ÁUDIO
 ======================================== */
 
 .area-audio {
     width: 100%;
 
-    margin-top: 35px;
+    margin-top: 30px;
 
     padding-top: 25px;
 
     border-top: 1px solid #292929;
+
+    display: none;
 }
 
 
 /* ========================================
-   TÍTULO "SUA GRAVAÇÃO"
+   MOSTRAR ÁUDIO
+======================================== */
+
+.area-audio.mostrar {
+    display: block;
+
+    animation: aparecerAudio 0.4s ease;
+}
+
+
+@keyframes aparecerAudio {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ========================================
+   TÍTULO DA GRAVAÇÃO
 ======================================== */
 
 .titulo-audio {
+
     margin-bottom: 15px;
 
     display: flex;
@@ -380,32 +448,41 @@ h1 {
 
     color: #ffffff;
 
-    font-size: 18px;
+    font-size: 17px;
+
     font-weight: bold;
 
     text-shadow:
-        0 0 8px rgba(220, 30, 30, 0.25);
+        0 0 8px rgba(220, 30, 30, 0.3);
 }
 
 
 /* ========================================
-   PLAYER DE ÁUDIO
+   PLAYER
 ======================================== */
 
 #player-audio {
+
     width: 100%;
-    height: 48px;
+
+    height: 45px;
+
     border-radius: 10px;
+
     background: #111;
+
     accent-color: #c52222;
+
+    outline: none;
 }
 
 
 /* ========================================
-   TEXTO ABAIXO DO PLAYER
+   TEXTO DO PLAYER
 ======================================== */
 
 .info-audio {
+
     margin-top: 10px;
 
     color: #666;
@@ -413,15 +490,6 @@ h1 {
     font-size: 12px;
 
     line-height: 1.4;
-}
-
-
-/* ========================================
-   ÁUDIO ESCONDIDO ANTES DA GRAVAÇÃO
-======================================== */
-
-.area-audio.escondido {
-    display: none;
 }
 
 
